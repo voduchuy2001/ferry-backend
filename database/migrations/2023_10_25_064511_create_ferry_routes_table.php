@@ -10,12 +10,12 @@ return new class () extends Migration {
      */
     public function up(): void
     {
-        Schema::create('ferries', function (Blueprint $table) {
+        Schema::create('ferry_routes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('number_of_seats');
-            $table->timestamp('year_of_production');
-            $table->string('manufacturing_place');
+            $table->string('departure_station');
+            $table->string('destination_station');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class () extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('ferries');
+        Schema::dropIfExists('ferry_routes');
     }
 };

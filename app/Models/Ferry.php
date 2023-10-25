@@ -15,4 +15,14 @@ class Ferry extends Model
         'manufacturing_place',
         'status',
     ];
+
+    public function ferryTrips()
+    {
+        return $this->hasMany(FerryTrip::class);
+    }
+
+    public function seats()
+    {
+        return $this->belongsToMany(Seat::class, 'ferry_seat');
+    }
 }

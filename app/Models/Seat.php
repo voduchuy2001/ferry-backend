@@ -11,4 +11,9 @@ class Seat extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function ferries()
+    {
+        return $this->belongsToMany(Ferry::class, 'ferry_seat');
+    }
 }

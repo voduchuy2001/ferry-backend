@@ -12,4 +12,14 @@ class FerryTrip extends Model
         'name',
         'departure_date',
     ];
+
+    public function ferryRoute()
+    {
+        return $this->belongsTo(FerryRoute::class);
+    }
+
+    public function ferry()
+    {
+        return $this->belongsTo(Ferry::class);
+    }
 }
