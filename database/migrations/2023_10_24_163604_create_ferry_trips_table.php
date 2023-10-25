@@ -13,7 +13,11 @@ return new class () extends Migration {
         Schema::create('ferry_trips', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->timestamp('departure_date');
+            $table->date('departure_date');
+            $table->time('departure_time');
+            $table->foreignId('ferry_id');
+            $table->foreignId('ferry_route_id');
+            $table->string('trip_type');
             $table->timestamps();
         });
     }

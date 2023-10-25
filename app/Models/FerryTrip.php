@@ -11,6 +11,10 @@ class FerryTrip extends Model
     protected $fillable = [
         'name',
         'departure_date',
+        'departure_time',
+        'ferry_id',
+        'ferry_route_id',
+        'trip_type',
     ];
 
     public function ferryRoute()

@@ -47,3 +47,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/seat/{id}', [SeatController::class, 'edit'])->name('seat.edit');
     Route::delete('/seat/{id}', [SeatController::class, 'delete'])->name('seat.delete');
 });
+
+Route::post('get-ferry-trip', [FerryTripController::class, 'getFerryTrip'])->name('get-ferry-trip');
+Route::post('get-ferry-for-round-trip', [FerryTripController::class, 'getFerryForRoundTrip'])->name('get-ferry-for-round-trip');

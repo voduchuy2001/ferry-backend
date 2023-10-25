@@ -17,7 +17,11 @@ class FerrryTripRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'between:2,100'],
-            'departure_date' => ['required', 'date_format:Y-m-d H:i:s', 'after:5 hours'],
+            'departure_date' => ['required', 'date_format:Y-m-d', 'after:5 hours'],
+            'departure_time' => ['required', 'date_format:H:i'],
+            'ferry_id' => ['required', 'numeric'],
+            'ferry_route_id' => ['required', 'numeric'],
+            'trip_type' => ['in:oneway,twoway']
         ];
     }
 
