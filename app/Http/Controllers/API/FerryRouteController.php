@@ -8,9 +8,12 @@ use App\Models\FerryRoute;
 
 class FerryRouteController extends Controller
 {
+    public $itemPerPage = 10;
+
     public function index()
     {
-        $ferryRoutes = FerryRoute::orderByDesc('created_at')->get();
+        $ferryRoutes = FerryRoute::orderByDesc('created_at')
+            ->paginate($this->itemPerPage);
 
         return response()->json([
             'data' => $ferryRoutes,
@@ -21,7 +24,6 @@ class FerryRouteController extends Controller
     public function create(FerryRouteRequest $request)
     {
         $data = $request->validated();
-
         $ferryRoute = FerryRoute::create($data);
 
         return response()->json([
@@ -30,11 +32,25 @@ class FerryRouteController extends Controller
         ]);
     }
 
-    public function edit($id)
+    public function edit(FerryRouteRequest $request, $id)
     {
+        $data = $request->validated();
+        $ferryRoute = FerryRoute::findOrFail($id);
+
+        $ferryRoute->update($data);
+        return response()->json([
+            'data' => $ferryRoute,
+            'message' => __('Success'),
+        ]);
     }
 
     public function delete($id)
     {
+        $ferryRoute = FerryRoute::findOrFail($id);
+        $ferryRoute->delete();
+
+        return response()->json([
+            'message' => __('Success'),
+        ]);
     }
 }

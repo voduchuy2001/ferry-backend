@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class FerryTripController extends Controller
 {
-    public int $itemPerPage = 10;
+    public $itemPerPage = 10;
 
     public function index()
     {
@@ -26,9 +26,7 @@ class FerryTripController extends Controller
     public function create(FerrryTripRequest $request)
     {
         $data = $request->validated();
-
         $ferryTrip = FerryTrip::create($data);
-
 
         return response()->json([
             'data' => $ferryTrip,
@@ -36,12 +34,26 @@ class FerryTripController extends Controller
         ]);
     }
 
-    public function edit($id)
+    public function edit(FerrryTripRequest $request, $id)
     {
+        $data = $request->validated();
+        $ferryTrip = FerryTrip::findOrFail($id);
+
+        $ferryTrip->update($data);
+        return response()->json([
+            'data' => $ferryTrip,
+            'message' => __('Success'),
+        ]);
     }
 
     public function delete($id)
     {
+        $ferryTrip = FerryTrip::findOrFail($id);
+        $ferryTrip->delete();
+
+        return response()->json([
+            'message' => __('Success'),
+        ]);
     }
 
     public function getFerryTrip(Request $request)
