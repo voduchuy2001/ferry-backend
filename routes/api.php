@@ -32,7 +32,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/ferry-trip/{id}', [FerryTripController::class, 'edit'])->name('ferry-trip.edit');
     Route::delete('/ferry-trip/{id}', [FerryTripController::class, 'delete'])->name('ferry-trip.delete');
 
-    Route::get('/ferry-route', [FerryRouteController::class, 'index'])->name('ferry-route.index');
     Route::post('/ferry-route', [FerryRouteController::class, 'create'])->name('ferry-route.create');
     Route::put('/ferry-route/{id}', [FerryRouteController::class, 'edit'])->name('ferry-route.edit');
     Route::delete('/ferry-route/{id}', [FerryRouteController::class, 'delete'])->name('ferry-route.delete');
@@ -47,6 +46,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('/seat/{id}', [SeatController::class, 'edit'])->name('seat.edit');
     Route::delete('/seat/{id}', [SeatController::class, 'delete'])->name('seat.delete');
 });
+
+Route::get('/ferry-route', [FerryRouteController::class, 'index'])->name('ferry-route.index');
 
 Route::post('get-ferry-trip', [FerryTripController::class, 'getFerryTrip'])->name('get-ferry-trip');
 Route::post('get-ferry-for-round-trip', [FerryTripController::class, 'getFerryForRoundTrip'])->name('get-ferry-for-round-trip');

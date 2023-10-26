@@ -8,12 +8,10 @@ use App\Models\FerryRoute;
 
 class FerryRouteController extends Controller
 {
-    public $itemPerPage = 10;
-
     public function index()
     {
         $ferryRoutes = FerryRoute::orderByDesc('created_at')
-            ->paginate($this->itemPerPage);
+            ->get();
 
         return response()->json([
             'data' => $ferryRoutes,
