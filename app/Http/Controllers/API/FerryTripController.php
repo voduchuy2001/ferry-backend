@@ -77,7 +77,8 @@ class FerryTripController extends Controller
     {
         $validator = Validator::make($request->input(), [
             'departureDate' => 'required|date_format:Y-m-d',
-            'departureStation' => 'required|string'
+            'departureStation' => 'required|string',
+            'destinationStation' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -89,13 +90,15 @@ class FerryTripController extends Controller
         $data = $validator->validated();
         $departureDate = $data['departureDate'];
         $departureStation = $data['departureStation'];
+        $destinationStation = $data['destinationStation'];
 
         $ferryForRoundTrips = FerryTrip::where('trip_type', 'twoway')
             ->where('departure_date', $departureDate)
-            ->whereIn('ferry_route_id', function ($query) use ($departureStation) {
+            ->whereIn('ferry_route_id', function ($query) use ($departureStation, $destinationStation) {
                 $query->select('id')
                     ->from('ferry_routes')
-                    ->where('departure_station', $departureStation);
+                    ->where('departure_station', $destinationStation)
+                    ->where('destination_station', $departureStation);
             })
             ->with('ferryRoute', 'ferry')
             ->get();
