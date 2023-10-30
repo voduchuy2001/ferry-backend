@@ -15,6 +15,7 @@ class FerryTripController extends Controller
     public function index()
     {
         $ferryTrips = FerryTrip::orderByDesc('created_at')
+            ->with(['ferryRoute', 'ferry'])
             ->paginate($this->itemPerPage);
 
         return response()->json([
@@ -73,7 +74,6 @@ class FerryTripController extends Controller
 
         $ferryTrips = FerryTrip::where(function ($query) use ($data) {
             $query->where('ferry_route_id', $data['routeId'])
-                ->where('trip_type', 'oneway')
                 ->where('departure_date', $data['departureDate']);
         })
             ->with('ferryRoute', 'ferry')
@@ -104,8 +104,7 @@ class FerryTripController extends Controller
         $departureStation = $data['departureStation'];
         $destinationStation = $data['destinationStation'];
 
-        $ferryForRoundTrips = FerryTrip::where('trip_type', 'twoway')
-            ->where('departure_date', $departureDate)
+        $ferryForRoundTrips = FerryTrip::where('departure_date', $departureDate)
             ->whereIn('ferry_route_id', function ($query) use ($departureStation, $destinationStation) {
                 $query->select('id')
                     ->from('ferry_routes')

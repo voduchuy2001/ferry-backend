@@ -14,7 +14,6 @@ class FerryTrip extends Model
         'departure_time',
         'ferry_id',
         'ferry_route_id',
-        'trip_type',
     ];
 
     public function ferryRoute()
