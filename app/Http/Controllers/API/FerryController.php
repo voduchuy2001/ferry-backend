@@ -21,6 +21,17 @@ class FerryController extends Controller
         ]);
     }
 
+    public function getAll()
+    {
+        $ferries = Ferry::orderByDesc('created_at')
+            ->paginate($this->itemPerPage);
+
+        return response()->json([
+            'data' => $ferries,
+            'message' => __('Success'),
+        ]);
+    }
+
     public function create(FerryRequest $request)
     {
         $data = $request->validated();

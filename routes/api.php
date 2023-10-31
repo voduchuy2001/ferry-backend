@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('/ferry-route/{id}', [FerryRouteController::class, 'delete'])->name('ferry-route.delete');
 
     Route::get('/ferry', [FerryController::class, 'index'])->name('ferry.index');
+    Route::get('/get-all-ferry', [FerryController::class, 'getAll'])->name('ferry.get-all');
     Route::post('/ferry', [FerryController::class, 'create'])->name('ferry.create');
     Route::put('/ferry/{id}', [FerryController::class, 'edit'])->name('ferry.edit');
     Route::delete('/ferry/{id}', [FerryController::class, 'delete'])->name('ferry.delete');

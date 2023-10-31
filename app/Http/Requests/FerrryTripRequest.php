@@ -16,7 +16,7 @@ class FerrryTripRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'departure_date' => ['required', 'date_format:Y-m-d', 'after:5 hours'],
+            'departure_date' => ['required', 'date_format:Y-m-d', 'after:today'],
             'departure_time' => ['required', 'date_format:H:i'],
             'ferry_id' => ['required', 'numeric'],
             'ferry_route_id' => ['required', 'numeric'],
