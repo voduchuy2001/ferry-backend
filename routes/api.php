@@ -52,3 +52,4 @@ Route::get('/ferry-route', [FerryRouteController::class, 'index'])->name('ferry-
 
 Route::post('get-ferry-trip', [FerryTripController::class, 'getFerryTrip'])->name('get-ferry-trip');
 Route::post('get-ferry-for-round-trip', [FerryTripController::class, 'getFerryForRoundTrip'])->name('get-ferry-for-round-trip');
+Route::get('/get-ferry-by-id/{id}', [FerryController::class, 'getFerryById'])->name('get-ferry-by-id');

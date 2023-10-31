@@ -20,6 +20,7 @@ class FerryRequest extends FormRequest
             'number_of_seats' => ['required', 'numeric', 'min:1'],
             'year_of_production' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
             'manufacturing_place' => ['required', 'string', 'between:2,100'],
+            'seat_ids' => ['required', 'array'],
         ];
     }
 

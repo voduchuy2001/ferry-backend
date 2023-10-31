@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('seat_id');
             $table->foreignId('ferry_id');
-            $table->string('status');
+            $table->string('status')->default('empty');
             $table->timestamps();
         });
     }

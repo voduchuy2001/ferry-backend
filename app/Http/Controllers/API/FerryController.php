@@ -37,6 +37,12 @@ class FerryController extends Controller
         $data = $request->validated();
         $ferry = Ferry::create($data);
 
+        $seatIds = $data['seat_ids'];
+
+        foreach ($seatIds as $seatId) {
+            $ferry->seats()->attach($seatId);
+        }
+
         return response()->json([
             'data' => $ferry,
             'message' => __('Success'),
@@ -49,6 +55,12 @@ class FerryController extends Controller
         $ferry = Ferry::findOrFail($id);
 
         $ferry->update($data);
+
+        $seatIds = $data['seat_ids'];
+        foreach ($seatIds as $seatId) {
+            $ferry->seats()->sync($seatId);
+        }
+
         return response()->json([
             'data' => $ferry,
             'message' => __('Success'),
@@ -58,9 +70,22 @@ class FerryController extends Controller
     public function delete($id)
     {
         $ferry = Ferry::findOrFail($id);
+        $ferry->seats()->detach();
         $ferry->delete();
 
         return response()->json([
+            'message' => __('Success'),
+        ]);
+    }
+
+    public function getFerryById($id)
+    {
+        $ferry = Ferry::findOrFail($id)
+            ->with(['seats', 'ferryTrips'])
+            ->get();
+
+        return response()->json([
+            'data' => $ferry,
             'message' => __('Success'),
         ]);
     }
