@@ -24,6 +24,7 @@ class Ferry extends Model
     public function seats()
     {
         return $this->belongsToMany(Seat::class, 'ferry_seat')
-            ->withPivot('status');
+            ->withPivot('status')
+            ->withTimestamps();
     }
 }

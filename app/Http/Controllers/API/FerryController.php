@@ -13,6 +13,7 @@ class FerryController extends Controller
     public function index()
     {
         $ferries = Ferry::orderByDesc('created_at')
+            ->with(['ferryTrips', 'seats'])
             ->paginate($this->itemPerPage);
 
         return response()->json([
@@ -80,9 +81,8 @@ class FerryController extends Controller
 
     public function getFerryById($id)
     {
-        $ferry = Ferry::findOrFail($id)
-            ->with(['seats', 'ferryTrips'])
-            ->get();
+        $ferry = Ferry::with(['seats', 'ferryTrips'])
+            ->findOrFail($id);
 
         return response()->json([
             'data' => $ferry,

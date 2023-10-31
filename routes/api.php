@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\FerryController;
 use App\Http\Controllers\API\FerryRouteController;
 use App\Http\Controllers\API\FerryTripController;
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\SeatController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,3 +54,6 @@ Route::get('/ferry-route', [FerryRouteController::class, 'index'])->name('ferry-
 Route::post('get-ferry-trip', [FerryTripController::class, 'getFerryTrip'])->name('get-ferry-trip');
 Route::post('get-ferry-for-round-trip', [FerryTripController::class, 'getFerryForRoundTrip'])->name('get-ferry-for-round-trip');
 Route::get('/get-ferry-by-id/{id}', [FerryController::class, 'getFerryById'])->name('get-ferry-by-id');
+
+Route::get('/payment/redirect', [PaymentController::class, 'redirect'])->name('payment.redirect');
+Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
