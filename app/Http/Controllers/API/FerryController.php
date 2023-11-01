@@ -58,9 +58,8 @@ class FerryController extends Controller
         $ferry->update($data);
 
         $seatIds = $data['seat_ids'];
-        foreach ($seatIds as $seatId) {
-            $ferry->seats()->sync($seatId);
-        }
+
+        $ferry->seats()->sync($seatIds);
 
         return response()->json([
             'data' => $ferry,
