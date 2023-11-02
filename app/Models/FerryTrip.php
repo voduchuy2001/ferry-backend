@@ -17,11 +17,11 @@ class FerryTrip extends Model
 
     public function ferryRoute()
     {
-        return $this->belongsTo(FerryRoute::class);
+        return $this->belongsTo(FerryRoute::class, 'ferry_route_id');
     }
 
     public function ferry()
     {
-        return $this->belongsTo(Ferry::class);
+        return $this->belongsTo(Ferry::class, 'ferry_id');
     }
 }

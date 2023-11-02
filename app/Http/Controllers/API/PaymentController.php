@@ -3,26 +3,66 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\OrderRequest;
+use App\Models\Bill;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
-    public function redirect(Request $request)
+    public function redirect(OrderRequest $request)
     {
+        $ticketsData = $request->validated();
+
+        $bill = Bill::create([
+            'amount' => $ticketsData['amount'],
+            'ticket_quantity' => $ticketsData['ticket_quantity'],
+            'user_id' => Auth::id(),
+        ]);
+
+        $tickets = [];
+        $fieldCount = count($ticketsData['phone_number']);
+
+        for ($i = 0; $i < $fieldCount; $i++) {
+            $ticketData = [
+                'phone_number' => $ticketsData['phone_number'][$i],
+                'identity' => $ticketsData['identity'][$i],
+                'name' => $ticketsData['name'][$i],
+                'date_of_birth' => $ticketsData['date_of_birth'][$i],
+                'place_of_birth' => $ticketsData['place_of_birth'][$i],
+                'nationality' => $ticketsData['nationality'][$i],
+                'sex' => $ticketsData['sex'][$i],
+                'email' => $ticketsData['email'][$i],
+                'address' => $ticketsData['address'][$i],
+                'seat_id' => $ticketsData['seat_id'][$i],
+                'ferry_trip_id' => $ticketsData['ferry_trip_id'][$i],
+                'ferry_id' => $ticketsData['ferry_id'][$i],
+            ];
+
+            $ticket = Ticket::create($ticketData);
+            $tickets[] = $ticket;
+
+            DB::table('ferry_seat')
+                ->where('seat_id', $ticket['seat_id'])
+                ->where('ferry_id', $ticket['ferry_id'])
+                ->update(['status' => 'book']);
+        }
+
         $vnpUrl = 'http://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
 
         if (!App::environment('local')) {
             $vnpUrl = 'https://sandbox.vnpayment.vn/merchant_webapi/merchant.html';
         }
 
-        $vnpReturnurl = env('APP_URL') . '/payments/vnpay/callback';
+        $vnpReturnurl = env('CLIENT_APP_URL') . '/payments/vnpay/callback';
         $vnpTmnCode = config('services.vnpay.vnp_tmn_code');
         $vnpHashSecret = config('services.vnpay.vnp_hash_secret');
-        $vnpTxnRef = rand(1, 1000000);
+        $vnpTxnRef = $bill->id;
         $vnpOrderInfo = 'Online payment';
         $vnpOrderType = 'billpayment';
-        $vnpAmount = 100000 * 100;
+        $vnpAmount = $bill->amount * 100;
         $vnpLocale = config('app.locale');
         $vnpBankCode = 'NCB';
         $vnpIpAddr = request()->ip();
@@ -74,11 +114,12 @@ class PaymentController extends Controller
 
         return response()->json([
             'data' => $vnpUrl,
+            'tikets' =>  $tickets,
             'message' => __('Generated sucesss')
         ]);
     }
 
-    public function callback(Request $request)
+    public function callback()
     {
         $message = 'Transaction success';
         $vnpSecureHash = request('vnp_SecureHash');
@@ -115,8 +156,17 @@ class PaymentController extends Controller
             return $message = 'Transaction failed!';
         }
 
+        $bill = Bill::where('id', request('vnp_TxnRef'))
+            ->with('user')
+            ->firstOrFail();
+
+        $bill->update([
+            'payment_status' => 'Paid'
+        ]);
+
         return response()->json([
             'data' => $message,
+            'billInfo' => $bill,
             'message' => __('Transaction success'),
         ]);
     }

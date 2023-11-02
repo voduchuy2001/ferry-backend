@@ -17,6 +17,6 @@ class FerryRoute extends Model
 
     public function ferryTrips()
     {
-        return $this->hasMany(FerryTrip::class);
+        return $this->hasMany(FerryTrip::class, 'ferry_route_id');
     }
 }
